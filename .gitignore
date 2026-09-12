@@ -1,0 +1,63 @@
+# =============================================
+# .gitignore — NetflixPHP
+# =============================================
+
+# ── PHP / XAMPP ────────────────────────────
+# Environment / credentials (if you ever add one)
+.env
+.env.local
+.env.*.local
+
+# PHP error log
+php_errorlog
+error_log
+*.log
+
+# Composer (not used, but just in case)
+/vendor/
+composer.lock
+
+# ── Database ───────────────────────────────
+# Never commit real DB dumps with passwords/data
+*.sql.bak
+*.sql.gz
+
+# ── OS files ───────────────────────────────
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+
+# ── Editor / IDE ───────────────────────────
+# VS Code
+.vscode/
+*.code-workspace
+
+# JetBrains (PHPStorm etc.)
+.idea/
+*.iml
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Notepad++
+nppBackup/
+
+# ── Project-specific ───────────────────────
+# Scratch/temp files
+readorder.txt
+*.tmp
+*.bak
+*.swp
