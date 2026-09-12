@@ -98,7 +98,7 @@ $page_title = $search
         <a href="index.php" class="logo" aria-label="NetflixPHP Home">
             <!-- Text-based logo: bold N + brand name -->
             <span class="logo-text" aria-hidden="true">
-                <span class="logo-n">N</span><span class="logo-brand">ETFLIXPHP</span>
+                <span class="logo-n">N</span>
             </span>
         </a>
 
@@ -237,13 +237,13 @@ $no_hero = ($search !== '' || $selected_genre !== '' || empty($videos));
                         alt="<?= htmlspecialchars($video['title']) ?> thumbnail"
                         class="card-thumb"
                         loading="lazy"
-                        onerror="this.src='https://via.placeholder.com/640x360/1a1a1a/E50914?text=No+Thumbnail'"
+                        onerror="this.onerror=null;this.src=this.src.replace('hqdefault','mqdefault')"
                     >
                     <!-- Play overlay -->
                     <div class="card-overlay">
                         <div class="play-circle">
                             <svg viewBox="0 0 24 24" fill="white" width="32" height="32">
-                                <polygon points="5,3 19,12 5,21"/>
+                                <polygon points="5,3 19,12 5,21"/>      
                             </svg>
                         </div>
                     </div>
@@ -280,14 +280,14 @@ $no_hero = ($search !== '' || $selected_genre !== '' || empty($videos));
     <div class="footer-logo">
         <!-- Text logo in footer -->
         <span class="logo-text logo-text--footer" aria-label="NetflixPHP">
-            <span class="logo-n">N</span><span class="logo-brand">ETFLIXPHP</span>
+            <span class="logo-n">N</span>
         </span>
     </div>
     <p class="footer-text">
-        College PHP &amp; MySQL Project &mdash; Built with ❤ using XAMPP
+        College PHP &amp; MySQL Project 
     </p>
     <p class="footer-credit">
-        Made by <strong>Sahil Aaftaab</strong>
+        Made by <strong>Mehaab</strong>
     </p>
     <p class="footer-sub">
         &copy; <?= date('Y') ?> NetflixPHP &nbsp;|&nbsp; For educational purposes only

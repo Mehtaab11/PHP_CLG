@@ -1,10 +1,12 @@
 -- ================================================================
--- schema.sql  (v2 — YouTube Trailers Edition)
+-- schema.sql  (v3 — Reliable Thumbnails Edition)
 -- Netflix-style PHP Project — Database Schema + Sample Data
 -- ================================================================
 -- IMPORTANT: Re-run this in phpMyAdmin to refresh the database.
--- All video_url values are now YouTube embed URLs.
--- Thumbnails auto-generated from YouTube's thumbnail CDN.
+-- All video_url values are YouTube video IDs.
+-- Thumbnails use hqdefault.jpg (guaranteed to exist for every video).
+-- maxresdefault.jpg only exists for ~50% of videos and caused
+-- broken images — hqdefault is the safe, always-available option.
 -- ================================================================
 
 CREATE DATABASE IF NOT EXISTS netflix_php
@@ -18,7 +20,7 @@ DROP TABLE IF EXISTS videos;
 -- ── videos table ─────────────────────────────────────────────────────────────
 -- video_url now stores a YouTube video ID (11 chars), e.g. "oOC-4JxqyzM"
 -- The PHP code builds the embed URL: youtube.com/embed/{video_url}
--- thumbnail_url auto-built from: img.youtube.com/vi/{video_url}/maxresdefault.jpg
+-- thumbnail_url auto-built from: img.youtube.com/vi/{video_url}/hqdefault.jpg
 -- ─────────────────────────────────────────────────────────────────────────────
 CREATE TABLE videos (
     id            INT          UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -43,7 +45,7 @@ INSERT INTO videos (title, description, thumbnail_url, video_url, duration, genr
 (
     'Breaking Bad — Official Trailer',
     'A high school chemistry teacher turned methamphetamine manufacturer partners with a former student to secure his family''s financial future. One of the greatest TV dramas ever made. Stars Bryan Cranston and Aaron Paul.',
-    'https://img.youtube.com/vi/oOC-4JxqyzM/maxresdefault.jpg',
+    'https://img.youtube.com/vi/oOC-4JxqyzM/hqdefault.jpg',
     'oOC-4JxqyzM',
     '2m 28s',
     'Drama',
@@ -53,7 +55,7 @@ INSERT INTO videos (title, description, thumbnail_url, video_url, duration, genr
 (
     'Peaky Blinders — Season 1 Trailer',
     'Set in the lawless backstreets of 1920s Birmingham, the story follows the Shelby crime family and their ambitious and ruthless boss Tommy Shelby. A gritty, stylish British gangster epic.',
-    'https://img.youtube.com/vi/oVzVdvGIC7U/maxresdefault.jpg',
+    'https://img.youtube.com/vi/oVzVdvGIC7U/hqdefault.jpg',
     'oVzVdvGIC7U',
     '1m 47s',
     'Drama',
@@ -63,7 +65,7 @@ INSERT INTO videos (title, description, thumbnail_url, video_url, duration, genr
 (
     'Ozark — Official Trailer',
     'A financial advisor drags his family from Chicago to the Missouri Ozarks, where he must launder $500 million in five years to appease a drug lord. Jason Bateman delivers a career-best performance.',
-    'https://img.youtube.com/vi/5hAXVqrljbs/maxresdefault.jpg',
+    'https://img.youtube.com/vi/5hAXVqrljbs/hqdefault.jpg',
     '5hAXVqrljbs',
     '2m 30s',
     'Drama',
@@ -74,7 +76,7 @@ INSERT INTO videos (title, description, thumbnail_url, video_url, duration, genr
 (
     'Squid Game — Official Trailer',
     'Hundreds of cash-strapped players accept a mysterious invitation to compete in children''s games. A hidden danger lurks behind the seemingly innocent games. The global Netflix phenomenon that took the world by storm.',
-    'https://img.youtube.com/vi/oqxAJKy0ii4/maxresdefault.jpg',
+    'https://img.youtube.com/vi/oqxAJKy0ii4/hqdefault.jpg',
     'oqxAJKy0ii4',
     '2m 11s',
     'Thriller',
@@ -84,7 +86,7 @@ INSERT INTO videos (title, description, thumbnail_url, video_url, duration, genr
 (
     'Money Heist — Official Trailer',
     'A criminal mastermind who goes by "The Professor" recruits eight thieves who have nothing to lose. They take hostages, shut themselves in the Royal Mint of Spain, and carry out the biggest heist in history.',
-    'https://img.youtube.com/vi/_lBGFyBiXBY/maxresdefault.jpg',
+    'https://img.youtube.com/vi/_lBGFyBiXBY/hqdefault.jpg',
     '_lBGFyBiXBY',
     '1m 55s',
     'Thriller',
@@ -94,7 +96,7 @@ INSERT INTO videos (title, description, thumbnail_url, video_url, duration, genr
 (
     'Dark — Official Trailer',
     'A missing child sets four interconnected families on a frantic hunt for answers as they unearth a sinister time travel conspiracy. Germany''s mind-bending answer to Stranger Things, spanning three seasons of pure brilliance.',
-    'https://img.youtube.com/vi/ESEUtust5Gs/maxresdefault.jpg',
+    'https://img.youtube.com/vi/ESEUtust5Gs/hqdefault.jpg',
     'ESEUtust5Gs',
     '1m 43s',
     'Thriller',
@@ -105,7 +107,7 @@ INSERT INTO videos (title, description, thumbnail_url, video_url, duration, genr
 (
     'Stranger Things — Season 4 Trailer',
     'When a young boy disappears, his mother, a police chief, and his friends must confront terrifying supernatural forces in order to get him back. Season 4 takes the gang to new and horrifying dimensions.',
-    'https://img.youtube.com/vi/b9EkMc79ZSU/maxresdefault.jpg',
+    'https://img.youtube.com/vi/b9EkMc79ZSU/hqdefault.jpg',
     'b9EkMc79ZSU',
     '3m 22s',
     'Sci-Fi',
@@ -115,7 +117,7 @@ INSERT INTO videos (title, description, thumbnail_url, video_url, duration, genr
 (
     'The Witcher — Official Trailer',
     'Geralt of Rivia, a mutated monster-hunter for hire, journeys toward his destiny in a turbulent world where people often prove more wicked than beasts. Based on the beloved fantasy book series.',
-    'https://img.youtube.com/vi/ndl7O5oBM8I/maxresdefault.jpg',
+    'https://img.youtube.com/vi/ndl7O5oBM8I/hqdefault.jpg',
     'ndl7O5oBM8I',
     '2m 31s',
     'Sci-Fi',
@@ -126,7 +128,7 @@ INSERT INTO videos (title, description, thumbnail_url, video_url, duration, genr
 (
     'Game of Thrones — Season 1 Trailer',
     'Nine noble families wage war against each other in order to gain control over the mythical land of Westeros. The most ambitious fantasy epic ever put to screen — dragons, politics, betrayal, and ice zombies.',
-    'https://img.youtube.com/vi/KPLWWIOCOOQ/maxresdefault.jpg',
+    'https://img.youtube.com/vi/KPLWWIOCOOQ/hqdefault.jpg',
     'KPLWWIOCOOQ',
     '1m 37s',
     'Action',
@@ -136,7 +138,7 @@ INSERT INTO videos (title, description, thumbnail_url, video_url, duration, genr
 (
     'Narcos — Official Trailer',
     'A chronicled look at the criminal exploits of Colombian drug lord Pablo Escobar, as well as the many other drug kingpins who plagued the country through the years. Based on real events.',
-    'https://img.youtube.com/vi/l0qS1NXID-Q/maxresdefault.jpg',
+    'https://img.youtube.com/vi/l0qS1NXID-Q/hqdefault.jpg',
     'l0qS1NXID-Q',
     '1m 49s',
     'Action',
@@ -147,7 +149,7 @@ INSERT INTO videos (title, description, thumbnail_url, video_url, duration, genr
 (
     'Wednesday — Official Trailer',
     'Smart, sarcastic and a little dead inside, Wednesday Addams investigates a murder spree while making new friends and enemies at Nevermore Academy. Jenna Ortega steals every single scene.',
-    'https://img.youtube.com/vi/Di310WS8zLk/maxresdefault.jpg',
+    'https://img.youtube.com/vi/Di310WS8zLk/hqdefault.jpg',
     'Di310WS8zLk',
     '2m 47s',
     'Comedy',
@@ -158,7 +160,7 @@ INSERT INTO videos (title, description, thumbnail_url, video_url, duration, genr
 (
     'The Crown — Season 1 Trailer',
     'Follows the political rivalries and romance of Queen Elizabeth II''s reign and the events that shaped the second half of the twentieth century. A lavish, meticulously crafted royal drama.',
-    'https://img.youtube.com/vi/JWtnJjn6ng0/maxresdefault.jpg',
+    'https://img.youtube.com/vi/JWtnJjn6ng0/hqdefault.jpg',
     'JWtnJjn6ng0',
     '1m 50s',
     'Documentary',
