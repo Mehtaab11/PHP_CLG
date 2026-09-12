@@ -42,6 +42,58 @@
     -webkit-user-select: none;
 }
 
+/* ── YouTube variant: no pointer cursor (iframe handles its own clicks) ─── */
+.player-wrapper--yt {
+    cursor: default;
+    /* Allow iframe fullscreen requests to pass through */
+    overflow: visible;
+}
+
+/* ── YouTube iframe container: fills the 16/9 wrapper exactly ────────────── */
+.yt-player-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    overflow: hidden;
+}
+
+.yt-iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+}
+
+/* ── YouTube badge bar shown below iframe ────────────────────────────────── */
+.yt-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(0, 0, 0, 0.8);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    font-size: 0.78rem;
+    color: var(--clr-text-muted);
+}
+
+.yt-badge svg { flex-shrink: 0; }
+
+.yt-watch-link {
+    margin-left: auto;
+    color: var(--clr-accent);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.75rem;
+    transition: color var(--duration-fast);
+}
+
+.yt-watch-link:hover { color: #ff4444; text-decoration: underline; }
+
+
+
 /* Fullscreen mode */
 .player-wrapper:fullscreen,
 .player-wrapper:-webkit-full-screen {

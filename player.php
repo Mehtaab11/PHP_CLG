@@ -106,6 +106,34 @@ try {
 
 // ── 5. Format upload date nicely ─────────────────────────────────────────────
 $upload_formatted = date('F j, Y', strtotime($video['upload_date']));
+
+// ── 6. Detect YouTube video ID ───────────────────────────────────────────────
+// video_url stores a raw YouTube video ID (11 chars), e.g. "oOC-4JxqyzM"
+// If it's a full URL we extract the ID, otherwise use it directly.
+$yt_id = '';
+$is_youtube = false;
+
+$raw_url = trim($video['video_url']);
+
+if (preg_match('/^[a-zA-Z0-9_\-]{11}$/', $raw_url)) {
+    // It's already a bare 11-char YouTube video ID
+    $yt_id      = $raw_url;
+    $is_youtube = true;
+} elseif (preg_match('/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_\-]{11})/', $raw_url, $m)) {
+    // It's a full YouTube URL — extract the ID
+    $yt_id      = $m[1];
+    $is_youtube = true;
+}
+
+// Build the final embed URL with recommended params:
+// autoplay=0  → don't autoplay (avoids browser policy blocking)
+// rel=0       → don't show unrelated videos at end
+// modestbranding=1 → smaller YouTube logo
+// color=red   → red progress bar to match our theme
+$embed_url = $is_youtube
+    ? 'https://www.youtube.com/embed/' . htmlspecialchars($yt_id)
+      . '?rel=0&modestbranding=1&color=red&enablejsapi=1'
+    : '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -158,10 +186,42 @@ $upload_formatted = date('F j, Y', strtotime($video['upload_date']));
     <!-- ── LEFT: Main Player Column ──────────────────────────────────────── -->
     <div class="player-main" id="player-column">
 
-        <!-- ── Custom HTML5 Video Player ─────────────────────────────────── -->
-        <div class="player-wrapper" id="player-wrapper">
+        <!-- ── Player: YouTube iframe OR HTML5 <video> ──────────────────── -->
+        <div class="player-wrapper <?= $is_youtube ? 'player-wrapper--yt' : '' ?>" id="player-wrapper">
 
-            <!-- Native HTML5 video element -->
+            <?php if ($is_youtube): ?>
+
+            <!-- ═══ YOUTUBE EMBED PLAYER ═══════════════════════════════════ -->
+            <!-- Using the official YouTube iframe API for legally embeddable  -->
+            <!-- public trailers. Controls are YouTube's native UI.           -->
+            <div class="yt-player-container">
+                <iframe
+                    id="yt-iframe"
+                    class="yt-iframe"
+                    src="<?= $embed_url ?>"
+                    title="<?= htmlspecialchars($video['title']) ?>"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen
+                    loading="lazy"
+                ></iframe>
+            </div>
+
+            <!-- YouTube badge shown below embed -->
+            <div class="yt-badge">
+                <svg viewBox="0 0 24 24" fill="#E50914" width="18" height="18">
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+                <span>Streaming via YouTube</span>
+                <a href="https://www.youtube.com/watch?v=<?= htmlspecialchars($yt_id) ?>"
+                   target="_blank" rel="noopener noreferrer" class="yt-watch-link">
+                    Watch on YouTube ↗
+                </a>
+            </div>
+
+            <?php else: ?>
+
+            <!-- ═══ HTML5 VIDEO PLAYER (for local/MP4 sources) ═════════════ -->
             <video
                 id="main-video"
                 class="main-video"
@@ -171,13 +231,12 @@ $upload_formatted = date('F j, Y', strtotime($video['upload_date']));
                 aria-label="<?= htmlspecialchars($video['title']) ?>"
             >
                 <source src="<?= htmlspecialchars($video['video_url']) ?>" type="video/mp4">
-                <!-- Fallback message for browsers that don't support HTML5 video -->
                 <p>Your browser does not support HTML5 video.
                    <a href="<?= htmlspecialchars($video['video_url']) ?>">Download the video</a>.
                 </p>
             </video>
 
-            <!-- ── Custom Control Bar ──────────────────────────────────── -->
+            <!-- ── Custom Control Bar (HTML5 only) ──────────────────────── -->
             <div class="custom-controls" id="custom-controls" aria-label="Video controls">
 
                 <!-- Progress / Seek Bar -->
@@ -289,11 +348,15 @@ $upload_formatted = date('F j, Y', strtotime($video['upload_date']));
                 </div>
             </div><!-- /custom-controls -->
 
-            <!-- Big center play/pause click overlay -->
+            <!-- Big center play/pause click overlay (HTML5 only) -->
             <div class="center-click-overlay" id="center-overlay" aria-hidden="true">
                 <div class="center-ripple" id="center-ripple"></div>
             </div>
+
+            <?php endif; /* end YouTube / HTML5 branch */ ?>
+
         </div><!-- /player-wrapper -->
+
 
         <!-- ── Video Metadata Below Player ────────────────────────────────── -->
         <div class="video-meta-section" id="video-meta">
