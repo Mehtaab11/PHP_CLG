@@ -130,9 +130,10 @@ $upload_formatted = date('F j, Y', strtotime($video['upload_date']));
 <nav class="navbar navbar--player" id="navbar">
     <div class="nav-left">
         <a href="index.php" class="logo" aria-label="Back to Home">
-            <svg viewBox="0 0 111 30" class="logo-svg" aria-hidden="true">
-                <path d="M105.062 14.28L111 30c-1.75-.25-3.499-.563-5.28-.845l-3.345-8.686-3.437 7.969c-1.687-.282-3.344-.376-5.031-.595l6.031-13.75L94.468 0h5.063l3.062 7.874L105.875 0h5.124l-5.937 14.28zM90.47 0h-4.965v27.498c1.62.094 3.312.156 5.062.343V0H90.47zM81.13 0H76.19v24.376c1.656.186 3.312.406 4.937.624V0h.003zM71.757 6.44L71.915 0H67.07v29.032c1.657.25 3.283.531 4.94.78l-.003-17.06c1.468 2.062 4.565 6.75 7.064 10.093.843-.156 1.687-.28 2.53-.406L77.22 15.65 71.757 6.44zM.033 0h4.967l6.59 18.5V0H16.6v27.498c-1.686.187-3.344.375-5.0.593L4.97 9.562V28c-1.657.22-3.344.44-4.937.689V0z" fill="#E50914"/>
-            </svg>
+            <!-- Text-based logo -->
+            <span class="logo-text" aria-hidden="true">
+                <span class="logo-n">N</span><span class="logo-brand">ETFLIXPHP</span>
+            </span>
         </a>
         <a href="index.php" class="back-link">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18">
@@ -387,7 +388,8 @@ $upload_formatted = date('F j, Y', strtotime($video['upload_date']));
      FOOTER
 ════════════════════════════════════════════ -->
 <footer class="footer footer--player">
-    <p class="footer-text">NetflixPHP — PHP &amp; MySQL College Project</p>
+    <p class="footer-text">NetflixPHP &mdash; PHP &amp; MySQL College Project</p>
+    <p class="footer-credit">Made by <strong>Sahil Aaftaab</strong></p>
     <p class="footer-sub">&copy; <?= date('Y') ?> For educational purposes only</p>
 </footer>
 

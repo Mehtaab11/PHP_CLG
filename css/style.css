@@ -120,15 +120,48 @@ ul, ol { list-style: none; }
 }
 
 /* Logo */
-.logo { display: flex; align-items: center; text-decoration: none; }
-.logo-svg { width: 100px; height: 28px; }
+.logo { display: flex; align-items: center; text-decoration: none; flex-shrink: 0; }
+
+/* Text-based logo */
+.logo-text {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0;
+    line-height: 1;
+    letter-spacing: -0.02em;
+}
+
+.logo-n {
+    font-size: 1.9rem;
+    font-weight: 900;
+    color: var(--clr-accent);
+    font-style: italic;
+    line-height: 1;
+    text-shadow: 0 0 12px rgba(229, 9, 20, 0.4);
+}
+
+.logo-brand {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--clr-text);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding-left: 2px;
+    align-self: flex-end;
+    padding-bottom: 3px;
+}
+
+.logo-text--footer .logo-n   { font-size: 1.5rem; }
+.logo-text--footer .logo-brand { font-size: 0.65rem; }
 
 /* Nav left: logo + genre links */
 .nav-left {
     display: flex;
     align-items: center;
-    gap: var(--sp-xl);
+    gap: var(--sp-lg);
     flex-shrink: 0;
+    min-width: 0; /* allow shrinking */
+    overflow: hidden;
 }
 
 /* Genre navigation links */
@@ -136,8 +169,12 @@ ul, ol { list-style: none; }
     display: flex;
     align-items: center;
     gap: var(--sp-xs);
-    flex-wrap: wrap;
+    flex-wrap: nowrap;   /* Don't wrap — scrolls on very small screens */
+    overflow-x: auto;
+    scrollbar-width: none;
+    min-width: 0;
 }
+.nav-genres::-webkit-scrollbar { display: none; }
 
 .genre-link {
     text-decoration: none;
@@ -176,8 +213,13 @@ ul, ol { list-style: none; }
     line-height: 1.5;
 }
 
-/* Nav right: search */
-.nav-right { display: flex; align-items: center; gap: var(--sp-md); }
+/* Nav right: search — fixed width, never overflows */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-md);
+    flex-shrink: 0;  /* Don't let search area squeeze out */
+}
 
 /* Search Form */
 .search-form { display: flex; }
@@ -206,7 +248,8 @@ ul, ol { list-style: none; }
     font-size: 0.875rem;
     padding: 0.45rem 0.75rem 0.45rem 2.2rem;
     border-radius: var(--radius-md);
-    width: 200px;
+    width: 180px;         /* Slightly narrower default */
+    max-width: 240px;     /* Hard cap so it can't overflow */
     transition: width var(--duration-normal) var(--ease-smooth),
                 border-color var(--duration-fast),
                 background var(--duration-fast);
@@ -214,7 +257,8 @@ ul, ol { list-style: none; }
 }
 
 .search-input:focus {
-    width: 280px;
+    width: 240px;
+    max-width: 240px;
     border-color: rgba(255,255,255,0.25);
     background: rgba(255,255,255,0.12);
 }
@@ -366,10 +410,9 @@ ul, ol { list-style: none; }
     padding: var(--sp-xl) var(--sp-xl);
     max-width: 1600px;
     margin: 0 auto;
+    /* Note: when no hero banner (genre filter / search), PHP injects
+       padding-top: calc(var(--navbar-h) + 1.5rem) as inline style      */
 }
-
-/* When hero is present, add top padding to avoid overlap */
-body:not(.player-body) .main-content { padding-top: var(--sp-xl); }
 
 /* Section header row */
 .section-header {
@@ -598,8 +641,17 @@ body:not(.player-body) .main-content { padding-top: var(--sp-xl); }
     margin-top: var(--sp-2xl);
 }
 
-.footer-logo { margin-bottom: var(--sp-md); opacity: 0.5; }
+.footer-logo { margin-bottom: var(--sp-md); }
 .footer-text { font-size: 0.85rem; color: var(--clr-text-muted); margin-bottom: var(--sp-xs); }
+.footer-credit {
+    font-size: 0.875rem;
+    color: var(--clr-text);
+    margin-bottom: var(--sp-xs);
+}
+.footer-credit strong {
+    color: var(--clr-accent);
+    font-weight: 700;
+}
 .footer-sub  { font-size: 0.75rem; color: var(--clr-text-dim); }
 
 /* ── 9. 404 NOT-FOUND PAGE ──────────────────────────────────────────────── */

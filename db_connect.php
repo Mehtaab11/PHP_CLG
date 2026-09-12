@@ -9,7 +9,7 @@
 
 // ── Database configuration ──────────────────────────────────────────────────
 define('DB_HOST', 'localhost');   // XAMPP/WAMP default host
-define('DB_NAME', 'netflix_php'); // Database name (create this in phpMyAdmin)
+define('DB_NAME', 'netflix_php'); // Database name (create this     in phpMyAdmin)
 define('DB_USER', 'root');        // Default XAMPP username
 define('DB_PASS', '');            // Default XAMPP password (blank)
 define('DB_CHARSET', 'utf8mb4');
@@ -18,15 +18,13 @@ define('DB_CHARSET', 'utf8mb4');
 $dsn     = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
 $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,  // Throw exceptions on error
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,        // Return assoc arrays
-    PDO::ATTR_EMULATE_PREPARES   => false,                    // Use native prepared statements
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    PDO::ATTR_EMULATE_PREPARES   => false,
 ];
 
-// ── Connect ─────────────────────────────────────────────────────────────────
 try {
     $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
 } catch (PDOException $e) {
-    // Show a friendly error — never expose raw errors in production
     die('
         <div style="
             font-family: Arial, sans-serif;

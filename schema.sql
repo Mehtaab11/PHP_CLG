@@ -27,8 +27,6 @@ CREATE TABLE videos (
     upload_date  DATE         NOT NULL,
     created_at   TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- 4. Insert sample videos
 INSERT INTO videos (title, description, thumbnail_url, video_url, duration, genre, upload_date) VALUES
 (
     'Big Buck Bunny',
