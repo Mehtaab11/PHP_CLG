@@ -30,6 +30,80 @@
         window.addEventListener('scroll', handleScroll, { passive: true });
     }
 
+    /* ─── Mobile Hamburger Menu ──────────────────────────────────────────────────── */
+    const hamburgerBtn  = document.getElementById('hamburger-btn');
+    const mobileMenu    = document.getElementById('mobile-menu');
+    const searchToggle  = document.getElementById('search-toggle-btn');
+
+    function openMobileMenu() {
+        if (!mobileMenu) return;
+        mobileMenu.classList.add('is-open');
+        mobileMenu.setAttribute('aria-hidden', 'false');
+        hamburgerBtn && hamburgerBtn.classList.add('is-open');
+        hamburgerBtn && hamburgerBtn.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = ''; // Keep scroll, menu overlays
+    }
+
+    function closeMobileMenu() {
+        if (!mobileMenu) return;
+        mobileMenu.classList.remove('is-open');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        hamburgerBtn && hamburgerBtn.classList.remove('is-open');
+        hamburgerBtn && hamburgerBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    if (hamburgerBtn && mobileMenu) {
+        hamburgerBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = mobileMenu.classList.contains('is-open');
+            isOpen ? closeMobileMenu() : openMobileMenu();
+        });
+
+        // Close when clicking a genre link inside the mobile menu
+        mobileMenu.querySelectorAll('.mobile-genre-link').forEach((link) => {
+            link.addEventListener('click', () => closeMobileMenu());
+        });
+
+        // Close when clicking outside the menu or hamburger
+        document.addEventListener('click', (e) => {
+            if (
+                mobileMenu.classList.contains('is-open') &&
+                !mobileMenu.contains(e.target) &&
+                !hamburgerBtn.contains(e.target)
+            ) {
+                closeMobileMenu();
+            }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mobileMenu.classList.contains('is-open')) {
+                closeMobileMenu();
+                hamburgerBtn.focus(); // Return focus to trigger
+            }
+        });
+
+        // Close menu if window is resized to desktop width
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 900) closeMobileMenu();
+        }, { passive: true });
+    }
+
+    /* ─── Mobile Search Toggle (opens mobile menu to search) ───────────────────── */
+    if (searchToggle && mobileMenu) {
+        searchToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (!mobileMenu.classList.contains('is-open')) {
+                openMobileMenu();
+            }
+            // Focus the mobile search input
+            const mobileInput = document.getElementById('mobile-search-input');
+            if (mobileInput) {
+                setTimeout(() => mobileInput.focus(), 50);
+            }
+        });
+    }
+
     /* ─── Search: press "/" to focus the search input ────────────────────── */
     const searchInput = document.getElementById('search-input');
 

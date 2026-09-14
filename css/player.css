@@ -17,6 +17,7 @@
     gap: 0;
     padding-top: var(--navbar-h);
     min-height: calc(100vh - var(--navbar-h));
+    min-height: calc(100dvh - var(--navbar-h));
     max-width: 1600px;
     margin: 0 auto;
 }
@@ -175,8 +176,9 @@
     justify-content: center;
     transition: color var(--duration-fast), background var(--duration-fast), transform var(--duration-fast);
     flex-shrink: 0;
-    min-width: 36px;
-    min-height: 36px;
+    min-width: 44px;  /* Touch-friendly minimum */
+    min-height: 44px; /* Touch-friendly minimum */
+    touch-action: manipulation;
 }
 
 .ctrl-btn:hover {
@@ -424,6 +426,8 @@
 /* ── 11. VIDEO META SECTION ─────────────────────────────────────────────── */
 .video-meta-section {
     padding: var(--sp-lg) var(--sp-xl);
+    padding-left:  calc(var(--sp-xl) + var(--safe-left));
+    padding-right: calc(var(--sp-xl) + var(--safe-right));
     border-bottom: 1px solid var(--clr-border);
     display: flex;
     flex-direction: column;
@@ -562,9 +566,11 @@
     background: var(--clr-bg-secondary);
     padding: var(--sp-lg);
     overflow-y: auto;
+    overflow-x: hidden;
 
     /* Sticky sidebar — scrolls independently */
     height: calc(100vh - var(--navbar-h));
+    height: calc(100dvh - var(--navbar-h));
     position: sticky;
     top: var(--navbar-h);
 
@@ -730,17 +736,46 @@
     .related-thumb-wrap { width: 100%; }
 }
 
-/* Mobile */
+/* Mobile (≤ 768px) */
+@media (max-width: 768px) {
+    .video-meta-section {
+        padding: var(--sp-md) var(--sp-lg);
+        padding-left:  calc(var(--sp-lg) + var(--safe-left));
+        padding-right: calc(var(--sp-lg) + var(--safe-right));
+    }
+
+    .player-sidebar {
+        padding: var(--sp-md) var(--sp-lg);
+        padding-left:  calc(var(--sp-lg) + var(--safe-left));
+        padding-right: calc(var(--sp-lg) + var(--safe-right));
+    }
+
+    .video-title { font-size: clamp(1.1rem, 4vw, 1.6rem); }
+
+    .meta-top { gap: var(--sp-sm); }
+}
+
+/* Mobile (≤ 640px) */
 @media (max-width: 640px) {
     :root { --navbar-h: 56px; }
 
-    .video-meta-section { padding: var(--sp-md); }
+    .video-meta-section {
+        padding: var(--sp-md);
+        padding-left:  calc(var(--sp-md) + var(--safe-left));
+        padding-right: calc(var(--sp-md) + var(--safe-right));
+    }
 
     .meta-top { flex-direction: column; align-items: flex-start; }
     .meta-actions { align-self: stretch; }
     .action-btn { flex: 1; justify-content: center; }
 
-    .player-sidebar { padding: var(--sp-md); }
+    .player-sidebar {
+        padding: var(--sp-md);
+        padding-left:  calc(var(--sp-md) + var(--safe-left));
+        padding-right: calc(var(--sp-md) + var(--safe-right));
+        padding-bottom: calc(var(--sp-md) + var(--safe-bottom));
+    }
+
     .related-list { grid-template-columns: 1fr; }
 
     /* Compact controls on small screens */
@@ -748,4 +783,56 @@
     .time-display { font-size: 0.72rem; }
 
     .nav-breadcrumb { display: none; }
+
+    /* Bigger progress bar touch target */
+    .progress-container { height: 28px; }
+
+    /* Reduce sidebar title size */
+    .sidebar-title { font-size: 0.9rem; }
+
+    /* Stack meta badges */
+    .meta-badges { gap: 6px; }
+    .badge { font-size: 0.7rem; padding: 3px 8px; }
+
+    /* Footer bottom safe area */
+    .footer--player {
+        padding-bottom: calc(var(--sp-xl) + var(--safe-bottom));
+    }
+}
+
+/* Very small (≤ 400px) */
+@media (max-width: 400px) {
+    .ctrl-btn { min-width: 36px; min-height: 36px; padding: 4px; }
+    .speed-btn { min-width: 34px; font-size: 0.72rem; }
+    .controls-left, .controls-right { gap: 2px; }
+
+    .related-list { grid-template-columns: 1fr; }
+}
+
+/* Touch device improvements */
+@media (hover: none) and (pointer: coarse) {
+    /* Always show controls on touch devices (no hover) */
+    .custom-controls {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Larger progress bar for thumb dragging */
+    .progress-container { height: 32px; }
+    .progress-container::before { height: 4px; }
+    .progress-container:hover::before { height: 4px; }
+    .progress-played { height: 4px; }
+    .progress-container:hover .progress-played { height: 4px; }
+    .progress-thumb { opacity: 1; width: 18px; height: 18px; }
+
+    /* Touch-friendly related cards */
+    .related-card:hover { transform: none; }
+    .related-card:active { background: rgba(255,255,255,0.07); }
+
+    /* Always show play overlay on related thumbs */
+    .related-play-overlay { opacity: 0; } /* Keep hidden for cleaner look */
+    .related-card:active .related-play-overlay { opacity: 1; }
+
+    /* Volume slider always visible on touch (at shorter width) */
+    .volume-group:not(:hover) .volume-slider { width: 50px; }
 }

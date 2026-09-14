@@ -20,6 +20,7 @@ if (!empty($_GET['genre']) && in_array($_GET['genre'], $allowed_genres)) {
 
 // ── Search Query (optional bonus feature) ────────────────────────────────────
 $search = '';
+
 if (!empty($_GET['search'])) {
     $search = trim($_GET['search']); // Sanitize whitespace
 }
@@ -124,7 +125,7 @@ $page_title = $search
         </ul>
     </div>
 
-    <!-- Search Bar -->
+    <!-- Search Bar (desktop) -->
     <div class="nav-right">
         <form action="index.php" method="GET" class="search-form" role="search">
             <div class="search-wrapper">
@@ -143,8 +144,67 @@ $page_title = $search
                 >
             </div>
         </form>
+
+        <!-- Mobile: search icon toggle -->
+        <button class="search-toggle-btn" id="search-toggle-btn" aria-label="Toggle search" aria-expanded="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+        </button>
+
+        <!-- Mobile: hamburger menu button -->
+        <button class="hamburger-btn" id="hamburger-btn" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-menu">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
     </div>
 </nav>
+
+<!-- ════════════════════════════════════════════
+     MOBILE SLIDE-DOWN MENU
+════════════════════════════════════════════ -->
+<div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+    <!-- Genre pill links -->
+    <ul class="mobile-genre-list" role="list">
+        <li>
+            <a href="index.php"
+               class="mobile-genre-link <?= $selected_genre === '' && $search === '' ? 'active' : '' ?>">
+                All
+            </a>
+        </li>
+        <?php foreach ($allowed_genres as $g): ?>
+        <li>
+            <a href="index.php?genre=<?= urlencode($g) ?>"
+               class="mobile-genre-link <?= $selected_genre === $g ? 'active' : '' ?>">
+                <?= htmlspecialchars($g) ?>
+                <?php if (!empty($genre_counts[$g])): ?>
+                    <span class="genre-badge"><?= $genre_counts[$g] ?></span>
+                <?php endif; ?>
+            </a>
+        </li>
+        <?php endforeach; ?>
+    </ul>
+
+    <!-- Mobile search form -->
+    <form action="index.php" method="GET" class="mobile-search-form" role="search">
+        <div class="mobile-search-wrapper">
+            <svg class="mobile-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input
+                type="text"
+                id="mobile-search-input"
+                name="search"
+                class="mobile-search-input"
+                placeholder="Search titles..."
+                value="<?= htmlspecialchars($search) ?>"
+                autocomplete="off"
+                aria-label="Search videos"
+            >
+        </div>
+    </form>
+</div>
 
 <!-- ════════════════════════════════════════════
      HERO BANNER (shown on homepage only)

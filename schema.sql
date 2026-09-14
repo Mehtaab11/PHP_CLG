@@ -1,13 +1,3 @@
--- ================================================================
--- schema.sql  (v3 — Reliable Thumbnails Edition)
--- Netflix-style PHP Project — Database Schema + Sample Data
--- ================================================================
--- IMPORTANT: Re-run this in phpMyAdmin to refresh the database.
--- All video_url values are YouTube video IDs.
--- Thumbnails use hqdefault.jpg (guaranteed to exist for every video).
--- maxresdefault.jpg only exists for ~50% of videos and caused
--- broken images — hqdefault is the safe, always-available option.
--- ================================================================
 
 CREATE DATABASE IF NOT EXISTS netflix_php
   CHARACTER SET utf8mb4
@@ -27,7 +17,7 @@ CREATE TABLE videos (
     title         VARCHAR(255) NOT NULL,
     description   TEXT         NOT NULL,
     thumbnail_url VARCHAR(500) NOT NULL  COMMENT 'YouTube maxresdefault thumb URL',
-    video_url     VARCHAR(500) NOT NULL  COMMENT 'YouTube video ID (11 chars)',
+    video_url     CHAR(11) NOT NULL  COMMENT 'YouTube video ID (11 chars)',
     duration      VARCHAR(20)  NOT NULL  COMMENT 'Human-readable e.g. 2m 30s',
     genre         VARCHAR(100) NOT NULL,
     upload_date   DATE         NOT NULL,
