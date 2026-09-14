@@ -189,7 +189,7 @@ $page_title = $search
     <!-- Mobile search form -->
     <form action="index.php" method="GET" class="mobile-search-form" role="search">
         <div class="mobile-search-wrapper">
-            <svg class="mobile-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <svg class="mobile-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" aria-hidden="true">
                 <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
             </svg>
             <input

@@ -291,7 +291,8 @@ ul, ol { list-style: none; }
 
 /* ── Mobile slide-down menu ──────────────────────────────────────────────── */
 .mobile-menu {
-    display: none;
+    display: flex;              /* Always flex — hidden via visibility */
+    flex-direction: column;
     position: fixed;
     top: var(--navbar-h);
     left: 0;
@@ -303,19 +304,22 @@ ul, ol { list-style: none; }
     border-bottom: 1px solid var(--clr-border);
     padding: var(--sp-md) var(--sp-lg);
     padding-bottom: calc(var(--sp-md) + var(--safe-bottom));
-    flex-direction: column;
     gap: var(--sp-sm);
-    /* Slide-down animation */
-    transform: translateY(-8px);
+    /* Hidden state */
+    visibility: hidden;
     opacity: 0;
-    transition: transform var(--duration-normal) var(--ease-smooth),
-                opacity var(--duration-normal) var(--ease-smooth);
+    pointer-events: none;
+    transform: translateY(-10px);
+    transition: opacity var(--duration-normal) var(--ease-smooth),
+                visibility var(--duration-normal) var(--ease-smooth),
+                transform var(--duration-normal) var(--ease-smooth);
 }
 
 .mobile-menu.is-open {
-    display: flex;
-    transform: translateY(0);
+    visibility: visible;
     opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
 }
 
 .mobile-genre-list {
