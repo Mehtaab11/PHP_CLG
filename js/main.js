@@ -37,11 +37,16 @@
 
     function openMobileMenu() {
         if (!mobileMenu) return;
+        // Step 1: set display:flex so the element is in the render tree
+        mobileMenu.style.display = 'flex';
+        // Step 2: force a reflow so the browser registers display:flex
+        // before we add the class that triggers the CSS transition
+        mobileMenu.getBoundingClientRect();
+        // Step 3: add class — transition now fires from opacity:0 → 1
         mobileMenu.classList.add('is-open');
         mobileMenu.setAttribute('aria-hidden', 'false');
         hamburgerBtn && hamburgerBtn.classList.add('is-open');
         hamburgerBtn && hamburgerBtn.setAttribute('aria-expanded', 'true');
-        document.body.style.overflow = ''; // Keep scroll, menu overlays
     }
 
     function closeMobileMenu() {
@@ -50,6 +55,13 @@
         mobileMenu.setAttribute('aria-hidden', 'true');
         hamburgerBtn && hamburgerBtn.classList.remove('is-open');
         hamburgerBtn && hamburgerBtn.setAttribute('aria-expanded', 'false');
+        // After the CSS transition finishes, reset display:none
+        // so the element is fully removed from the render tree
+        const onEnd = () => {
+            mobileMenu.style.display = '';
+            mobileMenu.removeEventListener('transitionend', onEnd);
+        };
+        mobileMenu.addEventListener('transitionend', onEnd);
     }
 
     if (hamburgerBtn && mobileMenu) {

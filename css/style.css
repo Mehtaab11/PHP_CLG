@@ -291,7 +291,7 @@ ul, ol { list-style: none; }
 
 /* ── Mobile slide-down menu ──────────────────────────────────────────────── */
 .mobile-menu {
-    display: flex;              /* Always flex — hidden via visibility */
+    display: none !important;   /* JS sets display:flex before adding .is-open */
     flex-direction: column;
     position: fixed;
     top: var(--navbar-h);
@@ -305,20 +305,15 @@ ul, ol { list-style: none; }
     padding: var(--sp-md) var(--sp-lg);
     padding-bottom: calc(var(--sp-md) + var(--safe-bottom));
     gap: var(--sp-sm);
-    /* Hidden state */
-    visibility: hidden;
     opacity: 0;
-    pointer-events: none;
     transform: translateY(-10px);
     transition: opacity var(--duration-normal) var(--ease-smooth),
-                visibility var(--duration-normal) var(--ease-smooth),
                 transform var(--duration-normal) var(--ease-smooth);
 }
 
 .mobile-menu.is-open {
-    visibility: visible;
+    display: flex !important;   /* Overrides the !important on default state */
     opacity: 1;
-    pointer-events: auto;
     transform: translateY(0);
 }
 
